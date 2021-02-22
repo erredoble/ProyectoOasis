@@ -1,0 +1,7 @@
+<resources>
+    <!--Nombre de la aplicacion-->
+    <string name="app_name">Oasis</string>
+    <!--Opciones del menu principal-->
+    <string name="logotipo">Logotipo de la aplicación</string>
+
+</resources>
