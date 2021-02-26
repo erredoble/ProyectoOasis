@@ -21,7 +21,7 @@ import com.erredoble.oasis.modelo.entidad.Localizacion
     entities = [Ciudad::class, Area::class, Localizacion::class, Fuente::class],
     version = 1
 )
-abstract class BD_fuentes : RoomDatabase() {
+abstract class BDFuentes : RoomDatabase() {
 
     /** Metodos abstractos para manipular las entidades de la BD. */
     abstract fun ciudadDao(): CiudadDao
@@ -36,10 +36,10 @@ abstract class BD_fuentes : RoomDatabase() {
      */
     companion object {
         @Volatile
-        private var instanciaBD: BD_fuentes? = null
+        private var instanciaBD: BDFuentes? = null
 
         /** Este es el metodo que construye y devuelve una sola instancia de esta clase. */
-        fun getInstancia(context: Context): BD_fuentes {
+        fun getInstancia(context: Context): BDFuentes {
             val instanciaAuxUno =
                 instanciaBD
 
@@ -51,9 +51,9 @@ abstract class BD_fuentes : RoomDatabase() {
             synchronized(this) {
                 val instanciaAux = Room.databaseBuilder(
                     context,
-                    BD_fuentes::class.java,
+                    BDFuentes::class.java,
                     Constantes.NOMBRE_BD
-                ).createFromAsset("bd/bd.fuentes").allowMainThreadQueries().build()
+                ).createFromAsset("fuentes.bd").allowMainThreadQueries().build()
 
                 instanciaBD = instanciaAux
                 return instanciaAux

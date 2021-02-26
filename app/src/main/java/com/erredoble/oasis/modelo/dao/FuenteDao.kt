@@ -12,13 +12,16 @@ import com.erredoble.oasis.modelo.entidad.Fuente
 @Dao
 interface FuenteDao {
     @Query("SELECT * FROM fuente")
-    fun getArboles(): List<Fuente>
+    fun getFuentes(): List<Fuente>
+
+    @Query("select f.* from fuente f join localizacion l on f.loc_id = l.id_loc where l.area_id = :id_area")
+    fun getFuentes(id_area : Int): List<Fuente>
 
     @Query(value = "SELECT * FROM fuente WHERE id_fuente = :id_fuente")
-    fun getArbol(id_fuente: Int): Fuente
+    fun getFuente(id_fuente: Int): Fuente
 
     @Insert
-    fun addArbol(fuente: Fuente)
+    fun addFuente(fuente: Fuente)
 
 
 }
