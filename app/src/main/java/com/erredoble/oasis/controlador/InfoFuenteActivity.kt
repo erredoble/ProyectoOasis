@@ -30,10 +30,10 @@ class InfoFuenteActivity : AppCompatActivity() {
         // Obtener el controlador de la base de datos.
         BD = BDFuentes.getInstancia(this)
 
-        // Obtener los id de Area y Arbol de la actividad anterior.
+        // Obtener los id de Area y Fuente de la actividad anterior.
         getIdFuenteAreaActividadAnterior()
 
-        // Cargar el arbol seleccionado.
+        // Cargar la fuente seleccionada.
         cargarFuente()
 
         //Evento de boton volver

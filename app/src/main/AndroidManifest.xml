@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,16 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controlador.InfoFuenteActivity"></activity>
+        <activity android:name=".controlador.AcercaActivity"></activity>
+        <activity android:name=".controlador.InfoFuenteActivity" />
         <activity android:name=".controlador.ListadoFuentesActivity" />
-        <activity android:name=".controlador.BusquedaAreaActivity" >
+        <activity android:name=".controlador.BusquedaAreaActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".controlador.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

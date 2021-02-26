@@ -23,7 +23,13 @@
             android:id="@+id/btn_busqueda"
             style="@style/EstiloBoton"
             android:text="ELEGIR ÁREA" />
-
-
+        <Button
+            android:id="@+id/btn_acerca"
+            style="@style/EstiloBoton"
+            android:text="ACERCA DE" />
+        <Button
+            android:id="@+id/btn_salir"
+            style="@style/EstiloBoton"
+            android:text="SALIR" />
     </LinearLayout>
 </ScrollView>
