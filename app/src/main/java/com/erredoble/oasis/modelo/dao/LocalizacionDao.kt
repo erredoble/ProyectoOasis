@@ -10,6 +10,7 @@ interface LocalizacionDao {
     @Query("SELECT * FROM Localizacion")
     fun getLocalizaciones(): List<Localizacion>
 
+
     @Query(value = "SELECT * FROM localizacion WHERE id_loc = :id_loc")
     fun getLocalizacion(id_loc : Int) : Localizacion
 

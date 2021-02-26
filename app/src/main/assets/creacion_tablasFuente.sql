@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS 'Localizacion'(
 id_loc INTEGER PRIMARY KEY NOT NULL,
 descrip_loc TEXT,
 coordenadas TEXT,
-num_mapa INTEGER,
 area_id INTEGER NOT NULL,
 CONSTRAINT FK_AREA FOREIGN KEY(area_id) REFERENCES 'Area'(id_area)
 );
@@ -26,6 +25,6 @@ CREATE TABLE IF NOT EXISTS 'Fuente' (
 id_fuente INTEGER PRIMARY KEY NOT NULL,
 descrip_fuente TEXT,
 foto_fuente TEXT,
-loc_id,
+loc_id Integer NOT NULL,
 CONSTRAINT FK_LOCALIZACION FOREIGN KEY(loc_id) REFERENCES 'Localizacion'(id_loc)
 );

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controlador.BusquedaAreaActivity">
+
+    <TextView
+        style="@style/TextoTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BUSQUEDA POR ÁREA" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            style="@style/TextoLectura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SELECCIONA UN ÁREA" />
+
+        <Spinner
+            android:id="@+id/spnArea"
+            style="@style/TextoLectura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_ir"
+            style="@style/EstiloBoton"
+            android:text="IR" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_volver"
+        style="@style/EstiloBoton"
+        android:layout_alignParentBottom="true"
+        android:text="VOLVER" />
+
+</RelativeLayout>
