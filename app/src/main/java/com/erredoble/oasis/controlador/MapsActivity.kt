@@ -75,19 +75,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Hacer visible el boton de localizar.
         btn_localizar.visibility = View.VISIBLE
 
-        // Add a marker in Sydney and move the camera
-        val espolon = LatLng(42.4647, -2.4458)
-        mMap.addMarker(MarkerOptions().position(espolon).title("Marker in Plaza del Espolon"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(espolon, 13f))
-        //mMap.addMarker(MarkerOptions().position(marcaPrueba).title("Marker in MarcaPrueba"))
-        val marcaFuenteUnoLocation = LatLng(42.4747, -2.4458)
-        val marcaFuenteUno = mMap.addMarker(MarkerOptions()
-            .position(marcaFuenteUnoLocation)
-            .title("Prueba de Marcador personalizado")
-            .snippet("Esta es la descrip del marcador de prueba personalizado")
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador)))
-
-
+        // Add markers
+        addmarkers()
     }
 
     // ########################### METODOS DE PERMISOS ###########################
@@ -172,6 +161,52 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val posicionCamara: CameraPosition =
             CameraPosition.Builder().target(coordenadas).zoom(5.5f).bearing(5f).build()
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(posicionCamara))
+    }
+
+    private fun addmarkers() {
+        val puntoInicio = LatLng(42.4647, -2.4458)
+        mMap.addMarker(MarkerOptions().position(puntoInicio).title("Marker in Plaza del Espolon"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(puntoInicio, 13f))
+
+        //PARQUE DEL EBRO
+        val fuenteCuartoPuenteLocation = LatLng(42.4752, -2.4616)
+        val fuenteCuartoPuente = mMap.addMarker(
+            MarkerOptions()
+                .position(fuenteCuartoPuenteLocation).title("Fuente Cuarto Puente")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
+        )
+        val fuenteCanchaBaloncestoPosition = LatLng(42.4731, -2.4606)
+        val fuenteCanchaBasket = mMap.addMarker(
+            MarkerOptions()
+                .position(fuenteCanchaBaloncestoPosition).title("Fuente cancha de baloncesto")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
+        )
+        val fuentePinoPinonieroPosition = LatLng(42.4698, -2.4572)
+        val fuentePinoPinoniero = mMap.addMarker(
+            MarkerOptions()
+                .position(fuentePinoPinonieroPosition).title("Fuente del pino piñonero")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
+        )
+        val fuenteNuevaSeccionFemeninaPosition = LatLng(42.4696, -2.4551)
+        val fuenteNuevaSeccionFemenina = mMap.addMarker(
+            MarkerOptions()
+                .position(fuenteNuevaSeccionFemeninaPosition).title("Fuente nueva de la antigua seccion femenina")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
+        )
+        val fuenteViejaSeccionFemeninaPosition = LatLng(42.4692, -2.4548)
+        val fuenteViejaSeccionFemenina = mMap.addMarker(
+            MarkerOptions()
+                .position(fuenteViejaSeccionFemeninaPosition).title("Fuente vieja de la antigua seccion femenina")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
+        )
+        val fuenteMuroDelCuartelPosition = LatLng(42.4685, -2.4523)
+        val fuenteMuroDelCuartel = mMap.addMarker(
+            MarkerOptions()
+                .position(fuenteMuroDelCuartelPosition).title("Fuente junto al antiguo muro del cuartel")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
+        )
+
+
     }
 
 
