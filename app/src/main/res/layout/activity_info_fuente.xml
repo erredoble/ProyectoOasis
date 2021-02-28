@@ -29,6 +29,12 @@
         android:text="Aqui toda la descripcion de la fuente" />
 
     <Button
+        android:id="@+id/btn_Ir"
+        style="@style/EstiloBoton"
+        android:layout_above="@+id/btn_volver"
+        android:text="IR" />
+
+    <Button
         android:id="@+id/btn_volver"
         style="@style/EstiloBoton"
         android:layout_alignParentBottom="true"

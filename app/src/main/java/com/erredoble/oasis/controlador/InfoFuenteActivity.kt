@@ -1,14 +1,18 @@
 package com.erredoble.oasis.controlador
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
 import com.erredoble.oasis.R
 import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Fuente
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_info_fuente.*
-import kotlinx.android.synthetic.main.activity_listado_fuentes.*
 import kotlinx.android.synthetic.main.activity_listado_fuentes.btn_volver
 
 class InfoFuenteActivity : AppCompatActivity() {
@@ -18,6 +22,8 @@ class InfoFuenteActivity : AppCompatActivity() {
     private lateinit var fuente: Fuente
     private var idFuente: Int = 0
     private var idArea: Int = 0
+    private lateinit var coordenadas: String
+    private lateinit var mMap: GoogleMap
 
     // ########################### METODO ON CREATE ###########################
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +41,9 @@ class InfoFuenteActivity : AppCompatActivity() {
 
         // Cargar la fuente seleccionada.
         cargarFuente()
+
+        //Ir a la fuente seleccionada en maps
+        irAFuenteEnMaps()
 
         //Evento de boton volver
         btn_volver.setOnClickListener { finish() }
@@ -60,7 +69,7 @@ class InfoFuenteActivity : AppCompatActivity() {
 
     private fun cargarFuente() {
         if (idFuente != -1) {
-            // Obtener el árbol seleccionado.
+            // Obtener la fuente seleccionada.
             fuente = BD.fuenteDao().getFuente(idFuente)
 
             //Poner datos en las etiquetas
@@ -76,6 +85,32 @@ class InfoFuenteActivity : AppCompatActivity() {
             tituloDescripcion.visibility = View.GONE
             lblDescripcion.visibility = View.GONE
         }
+    }
+
+
+    private fun irAFuenteEnMaps() {
+        //obtener el idloc de la fuente seleccionada
+       var idLocalizacion = fuente.loc_id
+
+        //obtener las coordenas de la localizacion seleccionada
+        coordenadas = BD.fuenteDao().getCoordenadas(idLocalizacion)
+
+        //splitear el string de coordenadas
+        val latLong = coordenadas.trim().split(",")
+        var latitudCadena = ""
+        var longitudCadena = ""
+        for(elemento in latLong){
+            latitudCadena = latLong[0]
+            longitudCadena = latLong[1]
+        }
+
+        var latitud = latitudCadena.toDouble()
+        var longitud = longitudCadena.toDouble()
+
+        //mover la camara a las coordenadas seleccionadas
+        val fuenteSeleccionda = LatLng(latitud, longitud)
+        CameraPosition.Builder().target(fuenteSeleccionda).zoom(5.5f).bearing(5f).build()
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fuenteSeleccionda, 13f))
     }
 
 }

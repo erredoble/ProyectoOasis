@@ -17,6 +17,9 @@ interface FuenteDao {
     @Query("select f.* from fuente f join localizacion l on f.loc_id = l.id_loc where l.area_id = :id_area")
     fun getFuentes(id_area : Int): List<Fuente>
 
+    @Query("select l.coordenadas from localizacion l join fuente f on f.loc_id = l.id_loc where f.loc_id = :id_loc")
+    fun getCoordenadas(id_loc : Int): String
+
     @Query(value = "SELECT * FROM fuente WHERE id_fuente = :id_fuente")
     fun getFuente(id_fuente: Int): Fuente
 
