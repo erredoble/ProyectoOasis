@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     // ########################### METODOS ###########################
     /** Controla lo que sucedera al pulsar un boton de esta actividad. */
     private fun eventosBoton() {
+        btn_mapa.setOnClickListener { cargarActividad(MapsActivity::class.java) }
         btn_busqueda.setOnClickListener { cargarActividad(BusquedaAreaActivity::class.java) }
         btn_acerca.setOnClickListener { cargarActividad(AcercaActivity::class.java) }
         btn_salir.setOnClickListener { finish() }

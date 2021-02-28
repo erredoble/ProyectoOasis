@@ -25,6 +25,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">26sp</item>
     </style>
+
     <style name="TextoNombreComun" parent="TextoTitulo">
         <item name="android:textAlignment">textStart</item>
     </style>
@@ -44,8 +45,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="BotonLocalizar" parent="EstiloBoton">
+        <item name="android:background">@drawable/estilo_boton_localizar</item>
+        <item name="android:layout_margin">15dp</item>
+        <item name="android:textColor">@color/colorBlanco</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:drawableStart">@drawable/ic_localizar</item>
+        <item name="android:padding">10dp</item>
+    </style>
 
 </resources>

@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=84:2E:EE:8E:68:22:53:3E:0E:81:13:7B:CF:55:AB:A0:B1:70:2C:F1%3Bcom.erredoble.oasis.controlador
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.erredoble.oasis.controlador
+
+    SHA-1 certificate fingerprint:
+    84:2E:EE:8E:68:22:53:3E:0E:81:13:7B:CF:55:AB:A0:B1:70:2C:F1
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDPHU2pfXDMRkAfzI8M94FFkUbRA7uAytQ</string>
+</resources>
