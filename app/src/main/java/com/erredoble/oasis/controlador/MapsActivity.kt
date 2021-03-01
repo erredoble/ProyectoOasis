@@ -159,7 +159,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Mover la camara hacia el marcador.
         val posicionCamara: CameraPosition =
-            CameraPosition.Builder().target(coordenadas).zoom(5.5f).bearing(5f).build()
+            CameraPosition.Builder().target(coordenadas).zoom(15f).bearing(0f).build()
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(posicionCamara))
     }
 
@@ -210,4 +210,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+    private fun addMarcador(latitud: Double, longitud: )
 }

@@ -1,6 +1,6 @@
 package com.erredoble.oasis.controlador
 
-import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,6 @@ import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Fuente
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_info_fuente.*
@@ -43,7 +42,7 @@ class InfoFuenteActivity : AppCompatActivity() {
         cargarFuente()
 
         //Ir a la fuente seleccionada en maps
-        irAFuenteEnMaps()
+//        irAFuenteEnMaps()
 
         //Evento de boton volver
         btn_volver.setOnClickListener { finish() }
