@@ -5,29 +5,30 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+
 /**
  * Modelo Fuente.
- * Claves ajenas (FK) - id_localizacion(Localizacion)
- * Restricciones - Si, ha de existir al menos una Localizacion antes de poder aniadir una Fuente.
+ * Claves ajenas (FK) - id_area(Area)
+ * Restricciones - Si, ha de existir al menos una Area
  */
-
 @Entity(
     foreignKeys = [ForeignKey(
-        entity = Localizacion::class,
-        parentColumns = ["id_loc"],
-        childColumns = ["loc_id"]
+        entity = Area::class,
+        parentColumns = ["id_area"],
+        childColumns = ["area_id"]
     )]
 )
 data class Fuente(
     @PrimaryKey val id_fuente: Int,
-    @ColumnInfo(name = "descrip_fuente") var descrip_fuente: String?,
-    @ColumnInfo(name = "foto_fuente") val foto_fuente: String?,
-    @ColumnInfo(name = "loc_id") val loc_id: Int
+    @ColumnInfo(name = "descripcion") var descripcion: String,
+    @ColumnInfo(name = "coordenadas") val coordenadas: String,
+    @ColumnInfo(name = "area_id") val area_id: Int
 ) {
     override fun toString(): String {
-        return "Fuente:id_fuente=$id_fuente\n" +
-                " - descrip_fuente=$descrip_fuente\n" +
-                " - foto_fuente=$foto_fuente\n" +
-                " - loc_id=$loc_id"
+        return "Fuente\n" +
+                " - id_fuente=$id_fuente\n" +
+                " - descrip_loc=$descripcion\n" +
+                " - coordenadas='$coordenadas'\n" +
+                " - area_id=$area_id"
     }
 }

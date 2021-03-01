@@ -8,7 +8,6 @@ import com.erredoble.oasis.modelo.configuracion.Constantes
 import com.erredoble.oasis.modelo.entidad.Area
 import com.erredoble.oasis.modelo.entidad.Ciudad
 import com.erredoble.oasis.modelo.entidad.Fuente
-import com.erredoble.oasis.modelo.entidad.Localizacion
 
 /**
  * Clase encargada de controlar la BD.
@@ -18,7 +17,7 @@ import com.erredoble.oasis.modelo.entidad.Localizacion
  */
 
 @Database(
-    entities = [Ciudad::class, Area::class, Localizacion::class, Fuente::class],
+    entities = [Ciudad::class, Area::class, Fuente::class],
     version = 1
 )
 abstract class BDFuentes : RoomDatabase() {
@@ -26,7 +25,6 @@ abstract class BDFuentes : RoomDatabase() {
     /** Metodos abstractos para manipular las entidades de la BD. */
     abstract fun ciudadDao(): CiudadDao
     abstract fun areaDao(): AreaDao
-    abstract fun localizacionDao(): LocalizacionDao
     abstract fun fuenteDao(): FuenteDao
 
     /**

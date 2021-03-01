@@ -46,7 +46,7 @@ class InfoFuenteActivity : AppCompatActivity() {
 
         //Evento de boton volver
         btn_volver.setOnClickListener { finish() }
-
+        btn_Ir.setOnClickListener { irAFuente() }
     }
 
     // ########################### METODOS ###########################
@@ -72,7 +72,7 @@ class InfoFuenteActivity : AppCompatActivity() {
             fuente = BD.fuenteDao().getFuente(idFuente)
 
             //Poner datos en las etiquetas
-            lblDescripcion.text = fuente.descrip_fuente
+            lblDescripcion.text = fuente.descripcion
 
             // Hacer desaparecer los campos vacios.
             mostrarOcultarCampos()
@@ -80,36 +80,16 @@ class InfoFuenteActivity : AppCompatActivity() {
     }
 
     private fun mostrarOcultarCampos() {
-        if (fuente.descrip_fuente == null) {
+        if (fuente.descripcion == null) {
             tituloDescripcion.visibility = View.GONE
             lblDescripcion.visibility = View.GONE
         }
     }
 
-
-    private fun irAFuenteEnMaps() {
-        //obtener el idloc de la fuente seleccionada
-       var idLocalizacion = fuente.loc_id
-
-        //obtener las coordenas de la localizacion seleccionada
-        coordenadas = BD.fuenteDao().getCoordenadas(idLocalizacion)
-
-        //splitear el string de coordenadas
-        val latLong = coordenadas.trim().split(",")
-        var latitudCadena = ""
-        var longitudCadena = ""
-        for(elemento in latLong){
-            latitudCadena = latLong[0]
-            longitudCadena = latLong[1]
-        }
-
-        var latitud = latitudCadena.toDouble()
-        var longitud = longitudCadena.toDouble()
-
-        //mover la camara a las coordenadas seleccionadas
-        val fuenteSeleccionda = LatLng(latitud, longitud)
-        CameraPosition.Builder().target(fuenteSeleccionda).zoom(5.5f).bearing(5f).build()
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fuenteSeleccionda, 13f))
+    private fun irAFuente() {
+        val intent: Intent = Intent(this, MapsActivity::class.java)
+            .putExtra("idFuente", idFuente)
+        startActivity(intent)
     }
 
 }

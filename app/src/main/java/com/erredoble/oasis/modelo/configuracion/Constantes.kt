@@ -9,5 +9,6 @@ package com.erredoble.oasis.modelo.configuracion
 abstract class Constantes {
     companion object {
         const val NOMBRE_BD = "bd.fuentes"
+        const val NO_HAY_FUENTE = -1
     }
 }

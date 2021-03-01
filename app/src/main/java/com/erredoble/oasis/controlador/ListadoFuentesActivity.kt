@@ -80,12 +80,11 @@ class ListadoFuentesActivity : AppCompatActivity() {
 
         // Cargar el adaptador con todas las fuentes almacenadas en List.
         for (fuente in coleccionFuentes) {
-            adaptador.add(fuente.descrip_fuente)
+            adaptador.add(fuente.descripcion)
         }
         // Asignar el adaptador al ListView.
         lstListadoFuentes.adapter = adaptador
     }
-
 
     private fun cargarActividadInfoFuente(idFuente: Int, idArea: Int) {
         val intent = Intent(this, InfoFuenteActivity::class.java).putExtra("idFuente", idFuente)

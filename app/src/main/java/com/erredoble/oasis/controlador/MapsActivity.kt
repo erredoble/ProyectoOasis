@@ -6,9 +6,13 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import com.erredoble.oasis.R
+import com.erredoble.oasis.modelo.configuracion.Constantes
+import com.erredoble.oasis.modelo.dao.BDFuentes
+import com.erredoble.oasis.modelo.entidad.Fuente
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -37,12 +41,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // ########################### CAMPOS ###########################
     private lateinit var mMap: GoogleMap
     private var coordenadas: LatLng = LatLng(0.0, 0.0)
-    private var marcador: Marker? = null
+    private lateinit var bd: BDFuentes
+    private var idFuente: Int = Constantes.NO_HAY_FUENTE
 
     // ########################### METODO ON CREATE ###########################
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -53,6 +59,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Cargar los eventos de boton.
         eventosBoton()
+
+        // Obtener la instancia de la BD.
+        bd = BDFuentes.getInstancia(this)
+
+        // Intentar obtener el idFuente si hubiese una actividad anterior.
+        getIdFuenteActividadAnterior()
     }
 
 
@@ -75,8 +87,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Hacer visible el boton de localizar.
         btn_localizar.visibility = View.VISIBLE
 
-        // Add markers
-        addmarkers()
+        // Si no hay fuente carga todas y si la hay muestra solo esa.
+        if (idFuente == Constantes.NO_HAY_FUENTE) {
+            cargarTodasLasFuentes()
+            lblDescripcion.text = getText(R.string.todasLasFuentes)
+        }else{
+            val fuente = bd.fuenteDao().getFuente(idFuente)
+            addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.descripcion)
+            Log.e("COORDENADA", fuente.toString())
+            lblDescripcion.text = fuente.descripcion
+        }
+
     }
 
     // ########################### METODOS DE PERMISOS ###########################
@@ -145,17 +166,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         btn_localizar.setOnClickListener {
             getLatitudLongitud()
             moverCamaraMapa()
-            lblCoordenadas.text = coordenadas.toString()
         }
     }
 
     private fun moverCamaraMapa() {
-        // Eliminar todos los marcadores.
-        marcador?.remove()
-
-
-        // Aniadir el marcador y posicionar la camara.
-        marcador = mMap.addMarker(MarkerOptions().position(coordenadas).title("Aquí estoy"))
+        // Para hacer que aparezca el punto azul con mi ubicacion.
+        mMap.addMarker(MarkerOptions().position(coordenadas).visible(true))
 
         // Mover la camara hacia el marcador.
         val posicionCamara: CameraPosition =
@@ -163,52 +179,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(posicionCamara))
     }
 
-    private fun addmarkers() {
-        val puntoInicio = LatLng(42.4647, -2.4458)
-        mMap.addMarker(MarkerOptions().position(puntoInicio).title("Marker in Plaza del Espolon"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(puntoInicio, 13f))
-
-        //PARQUE DEL EBRO
-        val fuenteCuartoPuenteLocation = LatLng(42.4752, -2.4616)
-        val fuenteCuartoPuente = mMap.addMarker(
+    private fun addMarcador(coordenadas: LatLng, descripcion: String) {
+        mMap.addMarker(
             MarkerOptions()
-                .position(fuenteCuartoPuenteLocation).title("Fuente Cuarto Puente")
+                .position(coordenadas).title(descripcion)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
         )
-        val fuenteCanchaBaloncestoPosition = LatLng(42.4731, -2.4606)
-        val fuenteCanchaBasket = mMap.addMarker(
-            MarkerOptions()
-                .position(fuenteCanchaBaloncestoPosition).title("Fuente cancha de baloncesto")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
-        )
-        val fuentePinoPinonieroPosition = LatLng(42.4698, -2.4572)
-        val fuentePinoPinoniero = mMap.addMarker(
-            MarkerOptions()
-                .position(fuentePinoPinonieroPosition).title("Fuente del pino piñonero")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
-        )
-        val fuenteNuevaSeccionFemeninaPosition = LatLng(42.4696, -2.4551)
-        val fuenteNuevaSeccionFemenina = mMap.addMarker(
-            MarkerOptions()
-                .position(fuenteNuevaSeccionFemeninaPosition).title("Fuente nueva de la antigua seccion femenina")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
-        )
-        val fuenteViejaSeccionFemeninaPosition = LatLng(42.4692, -2.4548)
-        val fuenteViejaSeccionFemenina = mMap.addMarker(
-            MarkerOptions()
-                .position(fuenteViejaSeccionFemeninaPosition).title("Fuente vieja de la antigua seccion femenina")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
-        )
-        val fuenteMuroDelCuartelPosition = LatLng(42.4685, -2.4523)
-        val fuenteMuroDelCuartel = mMap.addMarker(
-            MarkerOptions()
-                .position(fuenteMuroDelCuartelPosition).title("Fuente junto al antiguo muro del cuartel")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.fuente_marcador))
-        )
-
-
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 13f))
     }
 
+    private fun cargarTodasLasFuentes() {
+        val fuentes: List<Fuente> = bd.fuenteDao().getFuentes()
 
-    private fun addMarcador(latitud: Double, longitud: )
+        for (fuente in fuentes) {
+            addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.descripcion.toString())
+        }
+    }
+
+    private fun traducirCoordenadas(Coordenadacadena: String): LatLng {
+        val latLong = Coordenadacadena.trim().split(",")
+        return LatLng(latLong[0].toDouble(), latLong[1].toDouble())
+    }
+
+    private fun getIdFuenteActividadAnterior() {
+        val idFuenteRecibida = intent.extras?.getInt("idFuente")
+
+        if (idFuenteRecibida != null) {
+            idFuente = idFuenteRecibida
+        }
+    }
+
 }

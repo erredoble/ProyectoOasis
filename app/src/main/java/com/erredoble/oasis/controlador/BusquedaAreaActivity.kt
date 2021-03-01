@@ -57,7 +57,7 @@ class BusquedaAreaActivity : AppCompatActivity() {
             spnArea.adapter = adaptador
         } catch (ex: Exception) {
             Log.e("Error", ex.message!!)
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error + ${ex.message}", Toast.LENGTH_LONG).show()
 
         }
     }
