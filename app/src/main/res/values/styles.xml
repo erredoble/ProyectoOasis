@@ -11,7 +11,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorNegro</item>
         <item name="android:padding">7dp</item>
-        <item name="fontFamily">@font/akayatelivigala_regular</item>
+        <item name="fontFamily">@font/quicksand_medium</item>
     </style>
 
     <style name="TitulosDescripFuente" parent="TextoLectura">

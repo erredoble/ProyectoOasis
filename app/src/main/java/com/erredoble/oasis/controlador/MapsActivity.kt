@@ -2,21 +2,26 @@ package com.erredoble.oasis.controlador
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.erredoble.oasis.R
 import com.erredoble.oasis.modelo.configuracion.Constantes
 import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Fuente
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -24,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.dialog_accept.view.*
 
 /**
  * Link Google Maps videotutorial: https://www.youtube.com/watch?v=3-84hvpb_zA
@@ -36,26 +42,34 @@ import kotlinx.android.synthetic.main.activity_maps.*
  * - Si no se conceden permisos que notifique con un mensaje y que salga de la actividad.
  */
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     // ########################### CAMPOS ###########################
+    private val ID_PERMISOS = 1
     private lateinit var mMap: GoogleMap
-    private var coordenadas: LatLng = LatLng(0.0, 0.0)
+    private var coordenadas: LatLng? = null
     private lateinit var bd: BDFuentes
     private var idFuente: Int = Constantes.NO_HAY_FUENTE
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private val ZOOM_CAMARA = 16.5f
 
     // ########################### METODO ON CREATE ###########################
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
+        // Quitar barra superior que sale por defecto con el nombre de la APP.
+        supportActionBar?.hide()
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // Quitar barra superior que sale por defecto con el nombre de la APP.
-        supportActionBar?.hide()
+
+        // Obtener el elemento necesario para obtener la ubicacion.
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
 
         // Cargar los eventos de boton.
         eventosBoton()
@@ -68,7 +82,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    // ########################### METODO AL ESTAR LISTO EL MAPA ###########################
+    // ########################### AL ESTAR LISTO EL MAPA ###########################
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -79,10 +93,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+        // Asignarlo al campo y asignar el escuchador a esta clase para controlar los eventos al pulsar el marcador.
         mMap = googleMap
+        mMap.setOnMarkerClickListener(this)
 
-        // Obtener localizacion actual.
-        comprobarPermisos()
+        // Requerir los permisos GPS si no los tiene.
+        if (!tienePermisosGPS()) {
+            requerirPermisos()
+        }
 
         // Hacer visible el boton de localizar.
         btn_localizar.visibility = View.VISIBLE
@@ -91,7 +109,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (idFuente == Constantes.NO_HAY_FUENTE) {
             cargarTodasLasFuentes()
             lblDescripcion.text = getText(R.string.todasLasFuentes)
-        }else{
+        } else {
             val fuente = bd.fuenteDao().getFuente(idFuente)
             addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.descripcion)
             Log.e("COORDENADA", fuente.toString())
@@ -100,83 +118,104 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    // ########################### METODOS DE PERMISOS ###########################
-    @SuppressLint("MissingPermission")
-    private fun comprobarPermisos() {
-        // Mostrar mi ubicacion actual.
-        if (!tienePermisosGPS()) {
-            requerirPermisos()
-        } else {
-            // Mostrar boton localizacion (GoogleMaps arriba derecha).
-            mMap.setMyLocationEnabled(true)
+    // ########################### AL HACER CLIC EN ALGUN MARCADOR ###########################
+    override fun onMarkerClick(p0: Marker?): Boolean {
+        mostrarTexto("MARCADOR TOCADO ${p0?.title}")
+        return false
+    }
+
+    // ########################### TRAS REQUERIR LOS PERMISOS ###########################
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == ID_PERMISOS && grantResults.isNotEmpty()) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                // ESTAN EN REGLA LOS PERMISOS
+                alPulsarBotonLocalizar()
+
+            } else {
+                mostrarTexto(getText(R.string.no_permisos).toString())
+            }
         }
     }
 
+
+    // ########################### METODOS DE PERMISOS ###########################
     // Pedir permisos, muestra un mensaje.
     private fun requerirPermisos() {
-        val permisos = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-        ActivityCompat.requestPermissions(this, permisos, 1)
+        val permisos = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.INTERNET
+        )
+        ActivityCompat.requestPermissions(this, permisos, ID_PERMISOS)
+    }
+
+    // Comprueba si esta activo el GPS y se puede acceder a internet.
+    private fun isActivoGPSyWifi(): Boolean {
+        val controlLoc = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return controlLoc.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     // Retorna true si tiene permisos para usar el GPS.
     private fun tienePermisosGPS(): Boolean {
-        return ActivityCompat.checkSelfPermission(
+        val permisoLocalizacion = ActivityCompat.checkSelfPermission(
             this, Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permisoLocalizacion2 = ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        return permisoLocalizacion && permisoLocalizacion2
     }
 
+    // ########################### METODOS BOTONES Y ACCIONES ###########################
+    private fun eventosBoton() {
+        btn_localizar.setOnClickListener { alPulsarBotonLocalizar() }
+    }
+
+    private fun alPulsarBotonLocalizar() {
+        getMiUbicacion()
+        posicionarCamara(coordenadas)
+        lblCoordenadas.text = coordenadas?.toString()
+    }
+
+
+    // ########################### METODOS GOOGLE MAPS ###########################
     @SuppressLint("MissingPermission")
-    private fun getLatitudLongitud() {
-        // Definir valores de geolocalizacion.
-        val peticionLocalizacion = LocationRequest()
-        peticionLocalizacion.interval = 10000
-        peticionLocalizacion.fastestInterval = 3000
-        peticionLocalizacion.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    private fun getMiUbicacion() {
+        if (tienePermisosGPS() && isActivoGPSyWifi()) {
+            mMap.isMyLocationEnabled = true
+            mMap.uiSettings.isMyLocationButtonEnabled = false
 
-        // Sobreescribir metodo de la clase LocationCallback.
-        class LocationCallbackPersonalizado() : LocationCallback() {
-            override fun onLocationResult(resultadoLoc: LocationResult) {
-                super.onLocationResult(resultadoLoc)
-                LocationServices.getFusedLocationProviderClient(this@MapsActivity)
-                    .removeLocationUpdates(this)
-                if (resultadoLoc.locations.size > 0) {
-                    val ultimoIndice = resultadoLoc.locations.size - 1
+            fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
+                val localizacion = task.result
 
-                    val latitud = resultadoLoc.locations[ultimoIndice].latitude
-                    val longitud = resultadoLoc.locations[ultimoIndice].longitude
-
-                    // Pasarle el valor al campo de la clase MapsActivity.
-                    this@MapsActivity.coordenadas = LatLng(latitud, longitud)
+                if (localizacion != null) {
+                    this@MapsActivity.coordenadas =
+                        LatLng(localizacion.latitude, localizacion.longitude)
                 }
             }
-        }
-        LocationServices.getFusedLocationProviderClient(this@MapsActivity)
-            .requestLocationUpdates(
-                peticionLocalizacion,
-                LocationCallbackPersonalizado(),
-                Looper.getMainLooper()
-            )
-    }
-
-    // ########################### METODOS ###########################
-    private fun eventosBoton() {
-        btn_localizar.setOnClickListener {
-            getLatitudLongitud()
-            moverCamaraMapa()
+        } else if (!tienePermisosGPS()) {
+            mostrarCuadroDialogoPermisos()
+        } else {
+            mostrarTexto(getString(R.string.asegurate_gps_wifi))
         }
     }
 
-    private fun moverCamaraMapa() {
-        // Para hacer que aparezca el punto azul con mi ubicacion.
-        mMap.addMarker(MarkerOptions().position(coordenadas).visible(true))
-
+    private fun posicionarCamara(coordenadas: LatLng?) {
         // Mover la camara hacia el marcador.
-        val posicionCamara: CameraPosition =
-            CameraPosition.Builder().target(coordenadas).zoom(15f).bearing(0f).build()
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(posicionCamara))
+        if (coordenadas != null) {
+            val posicionCamara: CameraPosition =
+                CameraPosition.Builder().target(coordenadas).zoom(ZOOM_CAMARA).bearing(0f).build()
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(posicionCamara))
+        }
     }
 
     private fun addMarcador(coordenadas: LatLng, descripcion: String) {
@@ -188,6 +227,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 13f))
     }
 
+    // ########################### METODOS PARA CARGAR LAS FUENTES ###########################
     private fun cargarTodasLasFuentes() {
         val fuentes: List<Fuente> = bd.fuenteDao().getFuentes()
 
@@ -207,6 +247,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (idFuenteRecibida != null) {
             idFuente = idFuenteRecibida
         }
+    }
+
+    // ########################### METODOS AUXILIARES ###########################
+    private fun mostrarTexto(mensaje: String) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun mostrarCuadroDialogoPermisos() {
+        // Construir el cuadro de dialogo
+        val constructor: AlertDialog.Builder = AlertDialog.Builder(this)
+        val inflater: LayoutInflater = layoutInflater
+        val vistaDialogo: View = inflater.inflate(R.layout.dialog_accept, null)
+        constructor.setView(vistaDialogo)
+        val cuadroDialogo: AlertDialog = constructor.create()
+
+        // Hacer que el fondo del layout sea invisible
+        cuadroDialogo.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // Definir los textos
+        vistaDialogo.lblDialogTitulo.text = getText(R.string.no_permisos)
+        vistaDialogo.lblDialogMensaje.text = getText(R.string.necesario_gps_wifi)
+        val btnDialogoAceptar: Button = vistaDialogo.btnDialogAceptar
+        btnDialogoAceptar.text = getText(R.string.conceder)
+        val btnDialogoRechazar: Button = vistaDialogo.btnDialogDenegar
+        btnDialogoRechazar.text = getText(R.string.denegar)
+
+        // Controlar los eventos de boton
+        btnDialogoAceptar.setOnClickListener {
+            requerirPermisos()
+            cuadroDialogo.dismiss()
+        }
+        btnDialogoRechazar.setOnClickListener { cuadroDialogo.dismiss() }
+
+        // Mostrar el cuadro de dialogo
+        cuadroDialogo.show()
     }
 
 }
