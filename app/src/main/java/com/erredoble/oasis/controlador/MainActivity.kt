@@ -20,9 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Quitar barra superior que sale por defecto con el nombre de la APP.
-        supportActionBar?.hide()
-
         // Obtener una instancia de la base de datos con room.
         bdFuentes = BDFuentes.getInstancia(this)
 
