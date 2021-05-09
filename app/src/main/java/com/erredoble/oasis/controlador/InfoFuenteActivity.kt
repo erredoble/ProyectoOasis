@@ -1,18 +1,20 @@
 package com.erredoble.oasis.controlador
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.erredoble.oasis.R
+import com.erredoble.oasis.modelo.configuracion.Constantes.Companion.NO_HAY_FUENTE
 import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Fuente
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_info_fuente.*
 import kotlinx.android.synthetic.main.activity_listado_fuentes.btn_volver
+
+/**
+ * Muestra una pequeña descripción de la fuente seleccionada 
+ * */
 
 class InfoFuenteActivity : AppCompatActivity() {
 
@@ -55,19 +57,19 @@ class InfoFuenteActivity : AppCompatActivity() {
         if (idFuenteRecibida != null) {
             idFuente = idFuenteRecibida
         } else {
-            idFuente = -1
+            idFuente = NO_HAY_FUENTE
         }
 
         val idAreaRecibida = intent.extras?.getInt("idArea")
         if (idAreaRecibida != null) {
             idArea = idAreaRecibida
         } else {
-            idArea = -1
+            idArea = NO_HAY_FUENTE
         }
     }
 
     private fun cargarFuente() {
-        if (idFuente != -1) {
+        if (idFuente != NO_HAY_FUENTE) {
             // Obtener la fuente seleccionada.
             fuente = BD.fuenteDao().getFuente(idFuente)
 

@@ -18,7 +18,7 @@ import com.erredoble.oasis.modelo.entidad.Fuente
 
 @Database(
     entities = [Ciudad::class, Area::class, Fuente::class],
-    version = 1
+    version = 3
 )
 abstract class BDFuentes : RoomDatabase() {
 

@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.activity_busqueda_area.*
 
 
 /**
- * Actividad que muestra la informacion sobre la APP y sus desarrollador..
+ * Actividad que muestra la informacion sobre la APP y su desarrollador..
  */
 class AcercaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -12,6 +12,10 @@ import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Fuente
 import kotlinx.android.synthetic.main.activity_listado_fuentes.*
 
+/**
+ * Carga una lista con todas las fuentes del area seleccionada.
+ * */
+
 class ListadoFuentesActivity : AppCompatActivity() {
     // ########################### CAMPOS ###########################
     private var idArea: Int = 0
@@ -36,7 +40,7 @@ class ListadoFuentesActivity : AppCompatActivity() {
         // Poner el título a la actividad.
         mostrarTitulo()
 
-        // Cargar y mostrar el listado de arboles de el area seleccionada.
+        // Cargar y mostrar el listado de fuentes de el area seleccionada.
         mostrarListadoFuentes()
 
         // Eventos de boton.

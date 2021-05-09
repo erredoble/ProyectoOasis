@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.dialog_accept.view.*
 
 /**
  * Link Google Maps videotutorial: https://www.youtube.com/watch?v=3-84hvpb_zA
- * Capa KML - https://developers.google.com/maps/documentation/android-sdk/utility/kml?hl=es-419
  * Obtener longitud y latitud (10:53): https://www.youtube.com/watch?v=ari3iD-3q8c
  *
  * TAREAS Y PROBLEMAS:
@@ -150,7 +149,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private fun requerirPermisos() {
         val permisos = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.INTERNET
         )
         ActivityCompat.requestPermissions(this, permisos, ID_PERMISOS)
@@ -232,7 +230,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         val fuentes: List<Fuente> = bd.fuenteDao().getFuentes()
 
         for (fuente in fuentes) {
-            addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.descripcion.toString())
+            addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.descripcion)
         }
     }
 
