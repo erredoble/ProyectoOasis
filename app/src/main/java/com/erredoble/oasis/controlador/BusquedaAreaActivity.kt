@@ -1,11 +1,11 @@
 package com.erredoble.oasis.controlador
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.erredoble.oasis.R
 import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Area

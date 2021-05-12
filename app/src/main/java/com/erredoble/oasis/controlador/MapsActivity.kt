@@ -7,27 +7,29 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.erredoble.oasis.R
 import com.erredoble.oasis.modelo.configuracion.Constantes
 import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Fuente
-import com.google.android.gms.location.*
-
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.dialog_accept.view.*
 
@@ -41,7 +43,7 @@ import kotlinx.android.synthetic.main.dialog_accept.view.*
  * - Si no se conceden permisos que notifique con un mensaje y que salga de la actividad.
  */
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // ########################### CAMPOS ###########################
     private val ID_PERMISOS = 1
@@ -94,7 +96,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     override fun onMapReady(googleMap: GoogleMap) {
         // Asignarlo al campo y asignar el escuchador a esta clase para controlar los eventos al pulsar el marcador.
         mMap = googleMap
-        mMap.setOnMarkerClickListener(this)
 
         // Requerir los permisos GPS si no los tiene.
         if (!tienePermisosGPS()) {
@@ -110,18 +111,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             lblDescripcion.text = getText(R.string.todasLasFuentes)
         } else {
             val fuente = bd.fuenteDao().getFuente(idFuente)
-            addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.descripcion)
+            addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.nombre)
             Log.e("COORDENADA", fuente.toString())
-            lblDescripcion.text = fuente.descripcion
+            lblDescripcion.text = fuente.nombre
         }
 
     }
 
-    // ########################### AL HACER CLIC EN ALGUN MARCADOR ###########################
-    override fun onMarkerClick(p0: Marker?): Boolean {
-        mostrarTexto("MARCADOR TOCADO ${p0?.title}")
-        return false
-    }
 
     // ########################### TRAS REQUERIR LOS PERMISOS ###########################
     override fun onRequestPermissionsResult(
@@ -181,7 +177,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private fun alPulsarBotonLocalizar() {
         getMiUbicacion()
         posicionarCamara(coordenadas)
-        lblCoordenadas.text = coordenadas?.toString()
     }
 
 
@@ -230,7 +225,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         val fuentes: List<Fuente> = bd.fuenteDao().getFuentes()
 
         for (fuente in fuentes) {
-            addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.descripcion)
+            addMarcador(traducirCoordenadas(fuente.coordenadas), fuente.nombre)
         }
     }
 

@@ -1,7 +1,6 @@
 package com.erredoble.oasis.modelo.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import com.erredoble.oasis.modelo.entidad.Fuente
 

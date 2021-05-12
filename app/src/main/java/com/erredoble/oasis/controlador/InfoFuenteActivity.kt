@@ -11,9 +11,10 @@ import com.erredoble.oasis.modelo.entidad.Fuente
 import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_info_fuente.*
 import kotlinx.android.synthetic.main.activity_listado_fuentes.btn_volver
+import java.lang.Exception
 
 /**
- * Muestra una pequeña descripción de la fuente seleccionada 
+ * Muestra una pequeña descripción de la fuente seleccionada
  * */
 
 class InfoFuenteActivity : AppCompatActivity() {
@@ -75,6 +76,17 @@ class InfoFuenteActivity : AppCompatActivity() {
 
             //Poner datos en las etiquetas
             lblDescripcion.text = fuente.descripcion
+
+            // Poner la foto de la fuente.
+            val id = this.resources.getIdentifier(
+                "com.erredoble.oasis:drawable/" + fuente.id_imagen,
+                null,
+                null
+            )
+            try {
+                this.imgFuente.setImageResource(id)
+            } catch (ex: Exception) {
+            }
 
             // Hacer desaparecer los campos vacios.
             mostrarOcultarCampos()
