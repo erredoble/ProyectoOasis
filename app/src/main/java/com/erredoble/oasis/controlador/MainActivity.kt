@@ -1,8 +1,8 @@
 package com.erredoble.oasis.controlador
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.erredoble.oasis.R
 import com.erredoble.oasis.modelo.dao.BDFuentes
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,8 +34,10 @@ class MainActivity : AppCompatActivity() {
     // ########################### METODOS ###########################
     /** Controla lo que sucedera al pulsar un boton de esta actividad. */
     private fun eventosBoton() {
+        btn_mapa.setOnClickListener { cargarActividad(MapsActivity::class.java) }
         btn_busqueda.setOnClickListener { cargarActividad(BusquedaAreaActivity::class.java) }
-
+        btn_acerca.setOnClickListener { cargarActividad(AcercaActivity::class.java) }
+        btn_salir.setOnClickListener { finish() }
     }
 
     // ########################### METODOS AUXILIARES ###########################

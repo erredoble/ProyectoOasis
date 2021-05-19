@@ -1,21 +1,33 @@
 <resources>
+    <!--Otros-->
+    <string name="vacio">#</string>
+
     <!--Nombre de la aplicacion-->
     <string name="app_name">Oasis</string>
     <!--Opciones del menu principal-->
     <string name="logotipo">Logotipo de la aplicación</string>
     <string name="title_activity_busqueda_area">BusquedaAreaActivity</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">Hello Square World!</string>
+
+    <!--Activity maps-->
+    <string name="title_activity_maps">Map</string>
+    <string name="localizame">Localízame</string>
+    <string name="no_permisos">No tienes permisos de ubicacion</string>
+    <string name="conceder">Conceder permisos</string>
+    <string name="denegar">Mejor no</string>
+    <string name="necesario_gps_wifi">Para poder emplear esta función es necesario tener permisos GPS para conocer tu ubicación y conexion a internet para cargar el mapa.</string>
+    <string name="asegurate_gps_wifi">Asegurate de que tanto el GPS como el Wifi o Datos estan activados.</string>
+
+
+    <string name="todasLasFuentes">Todas las fuentes</string>
+
+
 
 </resources>

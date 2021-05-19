@@ -6,27 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".controlador.InfoFuenteActivity">
 
-    <ImageView
-        android:id="@+id/imgFuente"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/foto_fuente_provisional" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_Ir"
+        android:layout_alignParentStart="true">
 
-    <TextView
-        android:id="@+id/tituloDescripcion"
-        style="@style/TitulosDescripFuente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imgFuente"
-        android:text="Descripción" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/lblDescripcion"
-        style="@style/TextoLectura"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tituloDescripcion"
-        android:text="Aqui toda la descripcion de la fuente" />
+
+            <ImageView
+                android:id="@+id/imgFuente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorNegro"
+                app:srcCompat="@drawable/foto_fuente_provisional" />
+
+            <TextView
+                android:id="@+id/tituloDescripcion"
+                style="@style/TitulosDescripFuente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Descripción" />
+
+            <TextView
+                android:id="@+id/lblDescripcion"
+                style="@style/TextoLectura"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aqui toda la descripcion de la fuente" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_Ir"
+        style="@style/EstiloBoton"
+        android:layout_marginTop="0dp"
+        android:layout_above="@+id/btn_volver"
+        android:text="IR" />
 
     <Button
         android:id="@+id/btn_volver"

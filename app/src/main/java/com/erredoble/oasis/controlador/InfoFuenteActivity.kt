@@ -1,15 +1,21 @@
 package com.erredoble.oasis.controlador
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import com.erredoble.oasis.R
+import com.erredoble.oasis.modelo.configuracion.Constantes.Companion.NO_HAY_FUENTE
 import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Fuente
+import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_info_fuente.*
-import kotlinx.android.synthetic.main.activity_listado_fuentes.*
 import kotlinx.android.synthetic.main.activity_listado_fuentes.btn_volver
+import java.lang.Exception
+
+/**
+ * Muestra una pequeña descripción de la fuente seleccionada
+ * */
 
 class InfoFuenteActivity : AppCompatActivity() {
 
@@ -18,6 +24,8 @@ class InfoFuenteActivity : AppCompatActivity() {
     private lateinit var fuente: Fuente
     private var idFuente: Int = 0
     private var idArea: Int = 0
+    private lateinit var coordenadas: String
+    private lateinit var mMap: GoogleMap
 
     // ########################### METODO ON CREATE ###########################
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,15 +38,18 @@ class InfoFuenteActivity : AppCompatActivity() {
         // Obtener el controlador de la base de datos.
         BD = BDFuentes.getInstancia(this)
 
-        // Obtener los id de Area y Arbol de la actividad anterior.
+        // Obtener los id de Area y Fuente de la actividad anterior.
         getIdFuenteAreaActividadAnterior()
 
-        // Cargar el arbol seleccionado.
+        // Cargar la fuente seleccionada.
         cargarFuente()
+
+        //Ir a la fuente seleccionada en maps
+//        irAFuenteEnMaps()
 
         //Evento de boton volver
         btn_volver.setOnClickListener { finish() }
-
+        btn_Ir.setOnClickListener { irAFuente() }
     }
 
     // ########################### METODOS ###########################
@@ -47,24 +58,35 @@ class InfoFuenteActivity : AppCompatActivity() {
         if (idFuenteRecibida != null) {
             idFuente = idFuenteRecibida
         } else {
-            idFuente = -1
+            idFuente = NO_HAY_FUENTE
         }
 
         val idAreaRecibida = intent.extras?.getInt("idArea")
         if (idAreaRecibida != null) {
             idArea = idAreaRecibida
         } else {
-            idArea = -1
+            idArea = NO_HAY_FUENTE
         }
     }
 
     private fun cargarFuente() {
-        if (idFuente != -1) {
-            // Obtener el árbol seleccionado.
+        if (idFuente != NO_HAY_FUENTE) {
+            // Obtener la fuente seleccionada.
             fuente = BD.fuenteDao().getFuente(idFuente)
 
             //Poner datos en las etiquetas
-            lblDescripcion.text = fuente.descrip_fuente
+            lblDescripcion.text = fuente.descripcion
+
+            // Poner la foto de la fuente.
+            val id = this.resources.getIdentifier(
+                "com.erredoble.oasis:drawable/" + fuente.id_imagen,
+                null,
+                null
+            )
+            try {
+                this.imgFuente.setImageResource(id)
+            } catch (ex: Exception) {
+            }
 
             // Hacer desaparecer los campos vacios.
             mostrarOcultarCampos()
@@ -72,10 +94,16 @@ class InfoFuenteActivity : AppCompatActivity() {
     }
 
     private fun mostrarOcultarCampos() {
-        if (fuente.descrip_fuente == null) {
+        if (fuente.descripcion == null) {
             tituloDescripcion.visibility = View.GONE
             lblDescripcion.visibility = View.GONE
         }
+    }
+
+    private fun irAFuente() {
+        val intent: Intent = Intent(this, MapsActivity::class.java)
+            .putExtra("idFuente", idFuente)
+        startActivity(intent)
     }
 
 }

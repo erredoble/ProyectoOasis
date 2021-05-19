@@ -11,7 +11,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorNegro</item>
         <item name="android:padding">7dp</item>
-        <item name="fontFamily">@font/akayatelivigala_regular</item>
+        <item name="fontFamily">@font/quicksand_medium</item>
     </style>
 
     <style name="TitulosDescripFuente" parent="TextoLectura">
@@ -25,6 +25,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">26sp</item>
     </style>
+
     <style name="TextoNombreComun" parent="TextoTitulo">
         <item name="android:textAlignment">textStart</item>
     </style>
@@ -33,19 +34,18 @@
         <item name="android:background">@drawable/estilo_boton</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlanco</item>
         <item name="android:layout_marginTop">7dp</item>
         <item name="android:padding">5dp</item>
         <item name="textAllCaps">false</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">@color/colorNegro</item>
+        <item name="android:shadowRadius">20</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

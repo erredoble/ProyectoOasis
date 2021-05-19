@@ -1,16 +1,19 @@
 package com.erredoble.oasis.controlador
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.erredoble.oasis.R
 import com.erredoble.oasis.modelo.dao.BDFuentes
 import com.erredoble.oasis.modelo.entidad.Fuente
 import kotlinx.android.synthetic.main.activity_listado_fuentes.*
+
+/**
+ * Carga una lista con todas las fuentes del area seleccionada.
+ * */
 
 class ListadoFuentesActivity : AppCompatActivity() {
     // ########################### CAMPOS ###########################
@@ -36,7 +39,7 @@ class ListadoFuentesActivity : AppCompatActivity() {
         // Poner el título a la actividad.
         mostrarTitulo()
 
-        // Cargar y mostrar el listado de arboles de el area seleccionada.
+        // Cargar y mostrar el listado de fuentes de el area seleccionada.
         mostrarListadoFuentes()
 
         // Eventos de boton.
@@ -53,13 +56,13 @@ class ListadoFuentesActivity : AppCompatActivity() {
     }
 
     private fun mostrarTitulo() {
-        var cadenaTitulo =
+        val cadenaTitulo =
             "Fuentes de" + " " + BD.areaDao().getArea(idArea).nombre_area
         lblTitulo.text = cadenaTitulo
     }
 
     private fun getIdAreaDeActividadAnterior() {
-        var idAreaRecibido = intent.extras?.getInt("idArea")
+        val idAreaRecibido = intent.extras?.getInt("idArea")
         if (idAreaRecibido != null) {
             idArea = idAreaRecibido
         } else {
@@ -68,7 +71,6 @@ class ListadoFuentesActivity : AppCompatActivity() {
                         "actividad BusquedaAreaActivity"
             )
         }
-        Toast.makeText(this, idArea.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun mostrarListadoFuentes() {
@@ -80,12 +82,11 @@ class ListadoFuentesActivity : AppCompatActivity() {
 
         // Cargar el adaptador con todas las fuentes almacenadas en List.
         for (fuente in coleccionFuentes) {
-            adaptador.add(fuente.descrip_fuente)
+            adaptador.add(fuente.nombre)
         }
         // Asignar el adaptador al ListView.
         lstListadoFuentes.adapter = adaptador
     }
-
 
     private fun cargarActividadInfoFuente(idFuente: Int, idArea: Int) {
         val intent = Intent(this, InfoFuenteActivity::class.java).putExtra("idFuente", idFuente)

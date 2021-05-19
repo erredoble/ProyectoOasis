@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBlanco"
+    android:background="@drawable/fondo"
     tools:context=".controlador.MainActivity">
 
     <LinearLayout
@@ -16,14 +16,29 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="60dp"
             android:contentDescription="@string/logotipo"
-            android:layout_marginBottom="8dp"
             android:src="@mipmap/ic_launcher" />
+
+        <Button
+            android:id="@+id/btn_mapa"
+            style="@style/EstiloBoton"
+            android:text="MAPA" />
+
         <Button
             android:id="@+id/btn_busqueda"
             style="@style/EstiloBoton"
             android:text="ELEGIR ÁREA" />
 
+        <Button
+            android:id="@+id/btn_acerca"
+            style="@style/EstiloBoton"
+            android:text="ACERCA DE" />
 
+        <Button
+            android:id="@+id/btn_salir"
+            style="@style/EstiloBoton"
+            android:text="SALIR" />
     </LinearLayout>
 </ScrollView>
