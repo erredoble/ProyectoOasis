@@ -62,7 +62,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Quitar barra superior que sale por defecto con el nombre de la APP.
         supportActionBar?.hide()
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Obtener el SupportMapFragment y recibir notificacion cuando el mapa este listo para usarse
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
